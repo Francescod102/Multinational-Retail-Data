@@ -1,3 +1,6 @@
+import pandas as pd
+import tabula
+import requests
 import boto3
 from botocore import UNSIGNED
 from botocore.client import Confing
