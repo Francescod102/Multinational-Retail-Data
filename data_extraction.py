@@ -1,10 +1,10 @@
 import pandas as pd
-import tabula
+import tabula as t
 import requests
 import boto3
 from botocore import UNSIGNED
 from botocore.client import Confing
-
+from database_utils import DatabaseConnector
 
 class DataExtractor:
 
@@ -16,7 +16,7 @@ class DataExtractor:
     
     # Create a method that extracts and reads card details from a PDF document
     def retrieve_pdf_data(self, link):
-        tables = tabula.read_pdf(link, lattice = True, pages = "all")
+        tables = t.read_pdf(link, lattice = True, pages = "all")
         card_details = pd.concat(tables)
         return card_details
     
