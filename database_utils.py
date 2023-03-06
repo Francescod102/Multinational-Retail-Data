@@ -1,6 +1,7 @@
 import yaml
 from sqlalchemy import create_engine , inspect 
 import psycopg2
+import config
 
 
 class DatabaseConnector:
@@ -9,12 +10,12 @@ class DatabaseConnector:
     def read_db_creds(self):
         with open('db_creds.yaml', "r") as f:
             data = yaml.safe_load(f)
-        return data
+            return data
         
     # method to initian a return a database engine
     def init_db_engine(self):
         data = self.read_db_creds()
-        engine = create_engine ()(f'postgresql://{data['RDS_USER']}:{data['RDS_PASSWORD']}@{data['RDS_HOST']}:{data['RDS_PORT']}/{data['RDS_DATABASE']})
+        engine = create_engine(f"postgresql://{data['RDS_USER']}:{data['RDS_PASSWORD']}@{data['RDS_HOST']}:{data['RDS_PORT']}/{data['RDS_DATABASE']}:{data['RDS_PORT']}/{data['RDS_DBAPI']}")
         engine.connect()
         return engine
 

@@ -15,16 +15,15 @@ class DataExtractor:
         self.API_KEY = 'yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX'
 
     #  create a method that extracts and reads user data from the databse
-    def read_rds_table(self,db_connector, table_name):
-        engine = db_connector.init_db_engine()
-        user_data = pd.read_sql_table(table_name, engine)
-        return user_data
+    def read_rds_table(self,table_name):
+        return pd.read_sql_table(table_name, self.rds_database)
+        
     
     # Create a method that extracts and reads card details from a PDF document
-    def retrieve_pdf_data(self, link):
-        tables = t.read_pdf(link, lattice = True, pages = "all")
-        card_details = pd.concat(tables)
-        return card_details
+    def retrieve_pdf_data(self, pdf_link):
+        pdf_dataframes = t.read_pdf(pdf_link, pages = "all")
+        return pd.concat( pdf_dataframes, ignore_index= True)
+        
     
     # Create a method to get that number of stores using an API
     def list_number_of_stores(self, url, headers):
