@@ -14,7 +14,7 @@ class DatabaseConnector:
     # method to initian a return a database engine
     def init_db_engine(self):
         data = self.read_db_creds()
-        engine = create_engine(f'postgresql://{data['RDS_USER']}:(data['RDS_PASSWORD']}@(data['RDS_HOST']}:{data['RDS_PORT']/{data['RDS_DATABASE'])
+        engine = create_engine ()(f'postgresql://{data['RDS_USER']}:{data['RDS_PASSWORD']}@{data['RDS_HOST']}:{data['RDS_PORT']}/{data['RDS_DATABASE']})
         engine.connect()
         return engine
 
