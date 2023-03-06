@@ -15,7 +15,7 @@ class DatabaseConnector:
     # method to initian a return a database engine
     def init_db_engine(self):
         data = self.read_db_creds()
-        engine = create_engine(f"postgresql://{data['RDS_USER']}:{data['RDS_PASSWORD']}@{data['RDS_HOST']}:{data['RDS_PORT']}/{data['RDS_DATABASE']}:{data['RDS_PORT']}/{data['RDS_DBAPI']}")
+        engine = create_engine(f"postgresql://{data['RDS_USER']}:{data['RDS_PASSWORD']}@{data['RDS_HOST']}:{data['RDS_PORT']}/{data['RDS_DATABASE']}:{data['RDS_PORT']}/")
         engine.connect()
         return engine
 
@@ -44,9 +44,9 @@ class DatabaseConnector:
         local_engine = create_engine('postgresql://admin:admin:adm1n@localhost:5432/Sales_Data')
         df.to_sql('dim_date_times', local_engine, if_exists = "replace")
         
-if __main__ == '__main__'
-db = DatabaseConnector()
-print(db.list_db_tables())
+if '__main__' == '__main__':
+    db = DatabaseConnector()
+    print(db.list_db_tables)
 
                                     
                             

@@ -3,7 +3,7 @@ import tabula as t
 import requests
 import boto3
 from botocore import UNSIGNED
-from botocore.client import Confing
+
 from database_utils import DatabaseConnector
 
 class DataExtractor:
