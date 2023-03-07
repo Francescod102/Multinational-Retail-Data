@@ -37,24 +37,22 @@ class DatabaseConnector:
         table_name = inspector.get_table_names()
         
         return table_name
+    
 #  create a method to upload the data in the database step7
     def upload_to_db(self,df,table_name):
         
-        # DATABASE_TYPE = 'postgresql'
-        # DBAPI = 'psycopg2'
-        # HOST = "localhost"
-        # USER = 'postgres'
-        # PASSWORD = 'yqcjftVD644'
-        # DATABASE = 'Sales_Data'
-        # PORT = 5432
+        DATABASE_TYPE = 'postgresql'
+        DBAPI = 'psycopg2'
+        HOST = "localhost"
+        USER = 'postgres'
+        DATABASE = 'Sales_Data'
+        PORT = 5432
 
     # `Store the data in the databe step 8
         local_engine = create_engine('postgresql://admin:admin:adm1n@localhost:5432/Sales_Data')
         df.to_sql('dim_date_times', local_engine, if_exists = "replace")
         
-if '__main__' == '__main__':
-    db = DatabaseConnector()
-    print(db.list_db_tables)
+
 
                                     
                             
