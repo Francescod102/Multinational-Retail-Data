@@ -15,22 +15,30 @@ class DatabaseConnector:
     # method to initian a return a database engine
     def init_db_engine(self):
         data = self.read_db_creds()
-        engine = create_engine(f"postgresql://{data['RDS_USER']}:{data['RDS_PASSWORD']}@{data['RDS_HOST']}:{data['RDS_PORT']}/{data['RDS_DATABASE']}:{data['RDS_PORT']}/")
-        engine.connect()
+       
+    #    use the dictionary to set variables
+        DATABASE_TYPE = 'postgresql'
+        DBAPI = 'psycopg2'
+        HOST = data['RDS_HOST']
+        USER = data['RDS_USER'] 
+        PASSWORD = data['RDS_PASSWORD'] 
+        DATABASE = data['RDS_DATABASE']
+        PORT = data['RDS_PORT']
+    
+    # create a database engine
+        engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
         return engine
-
-#  create a method to list all the tables in the database
+    
+#  create a method to list all the tables in the database step4
     def list_db_tables(self):
         engine = self.init_db_engine()
-
-        engine.connect()
-
         # retrieve information about the table inside the databe
         inspector = inspect(engine)
-        return inspector.get_table_names()
-
-#  create a method to upload the data in the database
-    def upload_to_db(self,df, table_name):
+        table_name = inspector.get_table_names()
+        
+        return table_name
+#  create a method to upload the data in the database step7
+    def upload_to_db(self,df,table_name):
         
         # DATABASE_TYPE = 'postgresql'
         # DBAPI = 'psycopg2'
@@ -40,7 +48,7 @@ class DatabaseConnector:
         # DATABASE = 'Sales_Data'
         # PORT = 5432
 
-    # `Store the data in the databe
+    # `Store the data in the databe step 8
         local_engine = create_engine('postgresql://admin:admin:adm1n@localhost:5432/Sales_Data')
         df.to_sql('dim_date_times', local_engine, if_exists = "replace")
         
