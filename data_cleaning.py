@@ -1,17 +1,19 @@
 import pandas as pd
-import numpy
+import numpy as np
 from data_extraction import DataExtractor
 
 
 
 class DataCleaning:
 
-# cretate a method for phone number
-    def clean_user_data(self, data, tablename):
-        
-                                                                             
-                     
-        return data
+    def clean_user_data(self):
+
+        df =  DataExtractor.retrieve_pdf_data(self, "https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf")
+        #  Remove Null values and duplicates
+        df = df.dropna()
+        df = df.drop_duplicates() 
+        print(df.info())        
+        return df
     
     #  Create a method to clean card details
 #     def clean_card_data(self, data):
@@ -23,7 +25,7 @@ class DataCleaning:
 
     
     
-# db = DataCleaning()
-# pdf = db.clean_user_data() 
-# print(pdf)
+db = DataCleaning()
+pdf = db.clean_user_data() 
+print(pdf)
 # user_data = db.clean_user_data()

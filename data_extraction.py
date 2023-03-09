@@ -23,9 +23,9 @@ class DataExtractor:
     def retrieve_pdf_data(self, pdf_link):
         # df = pd.read_csv('card_details.csv', index_col = 0, skiprows = 1, on_bad_lines = 'skip')
         pdf_dataframes = t.read_pdf(pdf_link, pages = "all")
-        df= pd.DataFrame(pdf_dataframes[0])
-        return df
-        #  return pd.concat( pdf_dataframes, ignore_index= True)
+        #df= pd.DataFrame(pdf_dataframes[0])
+        #return df
+        return pd.concat( pdf_dataframes, ignore_index= True)
         
     
 #     # Create a method to get that number of stores using an API

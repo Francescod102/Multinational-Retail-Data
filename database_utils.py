@@ -45,12 +45,13 @@ class DatabaseConnector:
         DBAPI = 'psycopg2'
         HOST = "localhost"
         USER = 'postgres'
+        PASSWORD = 'AiCore2022'
         DATABASE = 'Sales_Data'
         PORT = 5432
 
     # `Store the data in the databe step 8
         local_engine = create_engine('postgresql://admin:admin:adm1n@localhost:5432/Sales_Data')
-        df.to_sql('dim_date_times', local_engine, if_exists = "replace")
+        df.to_sql(table_name, local_engine, if_exists = "replace")
         
 
 
