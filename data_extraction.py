@@ -3,20 +3,19 @@ import tabula as t
 import requests
 import boto3
 from botocore import UNSIGNED
-
 from database_utils import DatabaseConnector
+
 
 class DataExtractor:
 
 
     def __init__ (self):
-        self.db = DatabaseConnector()
-        self.rds_database = self.db.init_db_engine()
-        self.API_KEY = 'yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX'
+        pass
 
     #  create a method that extracts and reads user data from the databse
-    def read_rds_table(self,table_name):
-        user_data = pd.read_sql_table(table_name, self.rds_database)
+    def read_rds_table(self,table_name, engine):
+        user_data = pd.read_sql_table(table_name, engine)
+        print('hereeeee')
         return user_data
     
     # Create a method that extracts and reads card details from a PDF document
@@ -43,3 +42,9 @@ class DataExtractor:
 if __name__ == '__main__': 
     extractor = DataExtractor()
     print(extractor.retrieve_pdf_data("https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf"))
+    
+
+    db = DatabaseConnector()
+    engine = db.init_db_engine()
+    df_orders = extractor.read_rds_table('legacy_store_details',engine)
+    print(df_orders)

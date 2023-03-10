@@ -2,8 +2,6 @@ import pandas as pd
 import numpy as np
 from data_extraction import DataExtractor
 
-
-
 class DataCleaning:
 
     def clean_user_data(self):
@@ -22,10 +20,10 @@ class DataCleaning:
 #         pdf_dataframe = pdf_dataframe[pd.to_numeric(pdf_dataframe['card_number'], errors='coerce').notnull()]
 #         return pdf_dataframe 
        
-
-    
-    
 db = DataCleaning()
 pdf = db.clean_user_data() 
 print(pdf)
 # user_data = db.clean_user_data()
+
+df_orders = DataExtractor.read_rds_table('orders_table',engine)
+    print(df_orders)
