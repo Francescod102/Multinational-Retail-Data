@@ -32,16 +32,17 @@ class DatabaseConnector:
 #  create a method to list all the tables in the database step4
     def list_db_tables(self):
         engine = self.init_db_engine()
+
         # retrieve information about the table inside the databe
         inspector = inspect(engine)
         table_name = inspector.get_table_names()
-        table = pd.read_sql_table('orders_table',engine)
+        # table = pd.read_sql_table('order_table',engine)
         print(table_name)
-        print(table)
-        return table_name
+        # print(table)
+        # return table_name
     
-#  create a method to upload the data in the database step7
-    def upload_to_db(self,df,table_name):
+# #  create a method to upload the data in the database step7
+    def upload_to_db(self,df,):
         
         DATABASE_TYPE = 'postgresql'
         DBAPI = 'psycopg2'
@@ -53,13 +54,14 @@ class DatabaseConnector:
 
     # `Store the data in the databe step 8
         local_engine = create_engine(f"{DATABASE_TYPE}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
-        df.to_sql(table_name, local_engine, if_exists = "replace")
+        df.to_sql("dim_users", local_engine, if_exists = "replace")
         
 
 if __name__ == '__main__': 
     Connector = DatabaseConnector()
-    Connector.list_db_tables()
-    #Connector.upload_to_db(table_name)
+    df = Connector.list_db_tables()
+    print(df)
+    # Connector.upload_to_db("dim_user")
                                     
                             
       
