@@ -8,14 +8,16 @@ class DatabaseConnector:
 
     # create a method that will read the creddentials and return a dictionary
     def read_db_creds(self):
+        # data = yaml.load(open('db_creds.yaml'), Loader=yaml.loader)
         with open('db_creds.yaml', "r") as f:
             data = yaml.safe_load(f)
-            return data
+        print(type(data))
+        return data
         
     # method to initian a return a database engine
     def init_db_engine(self):
         data = self.read_db_creds()
-       
+
     #    use the dictionary to set variables
         DATABASE_TYPE = 'postgresql'
         DBAPI = 'psycopg2'
@@ -27,7 +29,7 @@ class DatabaseConnector:
     
     # create a database engine
         engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
-        return engine
+        return engine.connect()
     
 #  create a method to list all the tables in the database step4
     def list_db_tables(self):
@@ -39,7 +41,7 @@ class DatabaseConnector:
         # table = pd.read_sql_table('order_table',engine)
         print(table_name)
         # print(table)
-        # return table_name
+        return table_name
     
 # #  create a method to upload the data in the database step7
     def upload_to_db(self,df,):

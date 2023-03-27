@@ -14,8 +14,9 @@ class DataExtractor:
 
 
     #  create a method that extracts and reads user data from the databse
-    def read_rds_table(self,table_name, engine):
-        user_data = pd.read_sql_table(table_name, engine)
+    def read_rds_table(self, table_name, db_connector):
+        engine = db_connector.init_db_engine()
+        user_data = pd.read_sql_table(table_name, con=engine)
         print('hereeeee')
         return user_data
     
@@ -45,7 +46,6 @@ if __name__ == '__main__':
     extractor = DataExtractor()
     
 
-    db = DatabaseConnector()
-    engine = db.init_db_engine()
-    df_orders = extractor.read_rds_table('legacy_users',engine)
+    # db = DatabaseConnector()
+    df_orders = extractor.read_rds_table('legacy_users', DatabaseConnector())
     print(df_orders)

@@ -3,10 +3,15 @@ import numpy as np
 from data_extraction import DataExtractor
 from database_utils import DatabaseConnector
 
+
 class DataCleaning:
 
-    def clean_user_data(self,):
-        users = DataExtractor.read_rds_table("table_name", engine)
+    def clean_user_data(self):
+        dbcon = DatabaseConnector()
+        dbex = DataExtractor()
+
+        # engine = db.init_db_engine()
+        users = dbex.read_rds_table(table_name="legacy_users", db_connector=dbcon)
         # replace Null 
         users = users.replace("Null", np.nan)
 
@@ -15,7 +20,7 @@ class DataCleaning:
         #  replace GGB to GB
         country_codes = ['GB','US','DE']
         users['country'] = users['country'].apply(lambda x: x if x in countries else np.nan)
-        users['country_code'] = users ['country_code'].str.rplace('GGB','GB')
+        users['country_code'] = users ['country_code'].str.replace('GGB','GB')
         # replace invalid country codes to nan
         users['join_date']= users['country_code'].apply(lambda x: x if x in country_codes else np.nan)
 
@@ -27,7 +32,7 @@ class DataCleaning:
         users.drop.duplicates(subset='email_address',keep='first', inplace=True)
 
         # drop nulls and index and reset index
-        users.dropna(inplace=True, subset=['country'])
+        users.dropna(inplace=True, subset=True)
         users.drop('index', axis = 1, inplace=True)
         users.reset_index(drop=True, inplace=True)
 
