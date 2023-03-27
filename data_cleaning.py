@@ -29,10 +29,13 @@ class DataCleaning:
         users['join_date']=pd.to_datetime(users['join_date'],infer_datetime_format=True, errors='coerce')
 
         # drop duplicate emails
-        users.drop.duplicates(subset='email_address',keep='first', inplace=True)
+        users.drop_duplicates(subset='email_address', keep='first', inplace=True)
+
+        # users.drop.duplicates(subset='email_address',keep='first', inplace=True)
 
         # drop nulls and index and reset index
-        users.dropna(inplace=True, subset=True)
+        # users.dropna(inplace=True, subset=True)
+        users.dropna(inplace=True)
         users.drop('index', axis = 1, inplace=True)
         users.reset_index(drop=True, inplace=True)
 
@@ -60,7 +63,10 @@ if __name__ == '__main__':
 
 obj = DataCleaning()
 df_clean = obj.clean_user_data()
-DatabaseConnector.upload_to_db(df_clean)
+db_connector = DatabaseConnector()
+db_connector.upload_to_db(df_clean)
+
+# DatabaseConnector.upload_to_db(df_clean)
 
 # df_clean = DataExtractor.read_rds_table(engine,'lagacy_users')
 # print(df)
