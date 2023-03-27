@@ -29,7 +29,7 @@ class DatabaseConnector:
     
     # create a database engine
         engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
-        return engine.connect()
+        return engine
     
 #  create a method to list all the tables in the database step4
     def list_db_tables(self):
