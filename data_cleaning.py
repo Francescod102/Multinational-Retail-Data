@@ -1,17 +1,13 @@
 import pandas as pd
 import numpy as np
-from data_extraction import DataExtractor
-from database_utils import DatabaseConnector
 
 
 class DataCleaning:
 
-    def clean_user_data(self):
-        dbcon = DatabaseConnector()
-        dbex = DataExtractor()
-
+    def clean_user_data(self,users):
+        
         # engine = db.init_db_engine()
-        users = dbex.read_rds_table(table_name="legacy_users", db_connector=dbcon)
+        
         # replace Null
         users = users.replace("Null", np.nan)
         # print (users.head())
@@ -54,22 +50,43 @@ class DataCleaning:
         # return dfx
     
     #  Create a method to clean card details
-#     def clean_card_data(self, data):
-#         pdf_dataframe = data[data['card_number'] != 'NULL']
-#         pdf_dataframe = pdf_dataframe[pdf_dataframe['card_number'] != 'card_number']
-#         pdf_dataframe = pdf_dataframe[pd.to_numeric(pdf_dataframe['card_number'], errors='coerce').notnull()]
-#         return pdf_dataframe 
-#  df =  DataExtractor.retrieve_pdf_data(self, "https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf")
-if __name__ == '__main__': 
-    cleaning = DataCleaning()
-    pdf = cleaning.clean_user_data
-    print(pdf)
+    def clean_card_data(self,data):
+        cleaning = DataCleaning()
+        # Convert the list to a DataFrame
+        pdf_dataframe = pd.DataFrame(data)
+        # Apply data cleaning operation to the Dataframe
+        # pdf_dataframe = cleaning.clean_card_data(df)
+        pdf_dataframe = pdf_dataframe.replace('NULL', np.nan)
+        # pdf_dataframe = data[data['card_number'] != 'NULL']
+        pdf_dataframe = pdf_dataframe[pdf_dataframe['card_number'].notnull()]
+        pdf_dataframe = pdf_dataframe[pdf_dataframe['card_number'] != 'card_number']
+        pdf_dataframe = pdf_dataframe[pd.to_numeric(pdf_dataframe['card_number'], errors='coerce').notnull()]
+        
+        return pdf_dataframe 
+    
+    def __init__(self, stores_df):
+        self.stores_df = stores_df
+        
+    def clean_store_data(self):
+        # Perform data cleaning operations on the stores_df dataframe
+        
+        
+        # Return cleaned dataframe
+        return cleaned_df
 
-obj = DataCleaning()
-df_clean = obj.clean_user_data()
-# print(df_clean.head)
-db_connector = DatabaseConnector()
-db_connector.upload_to_db(df_clean)
+
+  # pdf_dataframe = dbex.retrieve_pdf_data ( "https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf")
+        # pdf_dataframe = data[data['card_number'] != 'NULL']
+# if __name__ == '__main__': 
+    # cleaning = DataCleaning()
+    # pdf = cleaning.clean_card_data(df)
+    # print(pdf.head)
+
+# obj = DataCleaning()
+# df_clean = obj.clean_card_data()
+# # print(df_clean.head)
+# db_connector = DatabaseConnector()
+# db_connector.upload_to_db(df_clean)
 
 # DatabaseConnector.upload_to_db(df_clean)
 

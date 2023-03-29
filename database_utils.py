@@ -3,6 +3,9 @@ from sqlalchemy import create_engine , inspect
 import psycopg2
 import config
 import pandas as pd
+from data_extraction import DataExtractor
+from data_cleaning import DataCleaning
+
 
 class DatabaseConnector:
 
@@ -44,7 +47,7 @@ class DatabaseConnector:
         return table_name
     
 # #  create a method to upload the data in the database step7
-    def upload_to_db(self,df,):
+    def upload_to_db(self,df,table_name):
         
         DATABASE_TYPE = 'postgresql'
         DBAPI = 'psycopg2'
@@ -56,15 +59,31 @@ class DatabaseConnector:
 
     # `Store the data in the databe step 8
         local_engine = create_engine(f"{DATABASE_TYPE}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
-        df.to_sql("dim_users", local_engine, if_exists = "replace")
+        df.to_sql("dim_card_details", local_engine, if_exists = "replace")
         
+
 
 if __name__ == '__main__': 
     Connector = DatabaseConnector()
+    dbex = DataExtractor()
     df = Connector.list_db_tables()
     print(df)
     # Connector.upload_to_db("dim_user")
-                                    
+                                 
                             
-      
-        
+    users = dbex.read_rds_table(table_name="legacy_users", db_connector=Connector)  
+
+    cleaning_data = DataCleaning()
+    clean_user = cleaning_data.clean_user_data(users)
+    print(clean_user)
+
+# card_data.
+    
+    pdf_dataframe = dbex.retrieve_pdf_data ()
+    pdf_cleaning = DataCleaning()
+    cleaning_card_dataframe = pdf_cleaning.clean_card_data(pdf_dataframe)
+    print(cleaning_card_dataframe)
+
+    Connector.upload_to_db(cleaning_card_dataframe,table_name="dim_card_details")
+
+    # 
