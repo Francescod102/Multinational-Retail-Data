@@ -63,16 +63,33 @@ class DataCleaning:
         pdf_dataframe = pdf_dataframe[pd.to_numeric(pdf_dataframe['card_number'], errors='coerce').notnull()]
         
         return pdf_dataframe 
-    
-    def __init__(self, stores_df):
-        self.stores_df = stores_df
         
-    def clean_store_data(self):
+    # Create a method to clean store details
+    def clean_store_data(self, df):
         # Perform data cleaning operations on the stores_df dataframe
+        """Remove null values and duplicates"""
+        df = df.drop("lat", axis = 1)
+        df = df.dropna()
+        df = df.drop_duplicates()
+
+        """Remove and replace incorrectly typed values"""
+        df = df[~ df.locality.str.contains(r"\d")]
+        df = df[pd.to_numeric(df["latitude"], errors = "coerce").notnull()]
+        df = df[pd.to_numeric(df["staff_numbers"], errors = "coerce").notnull()]
+        df["continent"] = df["continent"].replace({"eeEurope": "Europe", "eeAmerica": "America"})
+
+        """Return standardize opening dates"""
+        df["opening_date"] = pd.to_datetime(df["opening_date"], infer_datetime_format = True, errors = "coerce")
         
+        """Drop original index and reset numeration"""
+        df = df.reset_index(drop = True)
+
+        return df
         
-        # Return cleaned dataframe
-        return cleaned_df
+    # def __init__(self, stores_df):
+    #     self.stores_df = stores_df  
+    #     # Return cleaned dataframe
+    #     return cleaned_df
 
 
   # pdf_dataframe = dbex.retrieve_pdf_data ( "https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf")

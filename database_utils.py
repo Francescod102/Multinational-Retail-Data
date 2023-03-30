@@ -59,7 +59,7 @@ class DatabaseConnector:
 
     # `Store the data in the databe step 8
         local_engine = create_engine(f"{DATABASE_TYPE}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
-        df.to_sql("dim_card_details", local_engine, if_exists = "replace")
+        df.to_sql("dim_store_details", local_engine, if_exists = "replace")
         
 
 
@@ -86,4 +86,12 @@ if __name__ == '__main__':
 
     Connector.upload_to_db(cleaning_card_dataframe,table_name="dim_card_details")
 
-    # 
+# Use the method to upload store details in the database
+    
+    api_dataframe = dbex.retrieve_stores_data()
+    df = DataCleaning()
+    api_cleaning_stores = df.clean_store_data(api_dataframe)
+    print(api_cleaning_stores)
+
+    Connector.upload_to_db(api_cleaning_stores,table_name="dim_store_details")
+    
