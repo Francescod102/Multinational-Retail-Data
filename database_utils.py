@@ -59,7 +59,7 @@ class DatabaseConnector:
 
     # `Store the data in the databe step 8
         local_engine = create_engine(f"{DATABASE_TYPE}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
-        df.to_sql("dim_store_details", local_engine, if_exists = "replace")
+        df.to_sql("dim_products", local_engine, if_exists = "replace")
         
 
 
@@ -95,3 +95,12 @@ if __name__ == '__main__':
 
     Connector.upload_to_db(api_cleaning_stores,table_name="dim_store_details")
     
+# Use the method to upload store details in the database
+
+    # s3_bucket = dbex.extract_from_s3()
+    s3_bucket = dbex.extract_from_s3(bucket_name='data-handling-public', object_name='products.csv', file_name='products.csv')
+    df = DataCleaning()
+    S3_bucket = df.convert_product_weights(s3_bucket)
+    print(s3_bucket)
+
+    Connector.upload_to_db(s3_bucket,table_name="dim_products")

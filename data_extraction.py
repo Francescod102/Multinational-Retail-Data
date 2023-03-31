@@ -61,11 +61,11 @@ class DataExtractor:
  # Create methods to download and extract product information stored in an S3 bucket on AWS
     def extract_from_s3(self, bucket_name, object_name, file_name):
         s3_client = boto3.client("s3", config = Config(signature_version = UNSIGNED))
-        s3_client.download_file(bucket_name, object_name, file_name)
+        s3_client.download_file(bucket_name, object_name,file_name)
         product_details = pd.read_csv(file_name)
         return product_details
 
 
-# if __name__ == '__main__': 
-#    extractor = DataExtractor()
-#    product_details = extractor.extract_from_s3("data-handling-public", "product.csv", "product.csv")
+if __name__ == '__main__': 
+   extractor = DataExtractor()
+   product_details = extractor.extract_from_s3(bucket_name='data-handling-public', object_name='products.csv', file_name='products.csv')
