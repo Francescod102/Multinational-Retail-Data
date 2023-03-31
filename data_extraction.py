@@ -4,6 +4,7 @@ import requests
 import boto3
 import requests
 from botocore import UNSIGNED
+from botocore.client import Config
 
 class DataExtractor:
 
@@ -38,7 +39,9 @@ class DataExtractor:
         # df = pd.concat(pdf_data)
         # print (pdf_link)
         # return df
-    
+
+# #     # Create a method to get that number of stores using an API
+
     def list_number_of_stores(self):
         api_key ={'x-api-key':'yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX'}
         store = requests.get("https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/number_stores",headers=api_key)
@@ -53,53 +56,16 @@ class DataExtractor:
         for store_number in range(0,number_of_stores):
             stores_list.append(requests.get('https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/store_details/'+str(store_number), headers=api_key).json())
         return pd.json_normalize(stores_list)
-       
-    
-    # def list_number_of_store(self):
-    #     stores = requests.get('https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/number_stores',headers=self.api_key)
-    #     n_of_stores = stores.json()
-    #     return n_of_stores["number_stores"]
         
 
-    # def retrieve_stores_data(self):
-    #     n_of_stores = self.list_number_of_store()
-    #     stores_list = []
-    #     for store_number in range(0, n_of_stores):
-    #         stores_list.append(requests.get('https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/store_details/'+str(store_number), headers=self.api_key).json())
-    #     return pd.json_normalize(stores_list)
-    #     print()
-
-    # def retrieve_pdf_data(self, pdf_link):
-    #     pdf_link = ("https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf")
-    #     # df = pd.read_csv('card_details.csv', index_col = 0, skiprows = 1, on_bad_lines = 'skip')
-    #     pdf_data= t.read_pdf(pdf_link, pages = "all" , multiple_tables=True)
-    #     df =pd.concat(pdf_data)
-    #     # df= pd.DataFrame(pdf_dataframes[0])
-        
-        # return df
-        # return pd.concat( pdf_dataframes, ignore_index= True)
-        
-    
-# #     # Create a method to get that number of stores using an API
-    # def list_number_of_stores(self, url, headers):
-    #     response = requests.get(url, headers = headers)
-
-    #     # return the number of stores if code is correct
-    #     if response.status_code == 200:
-    #         data = response.jason()
-    #         return data['number_stores']
-    #     else:
-    #         # return None
-    #         print(data)
+ # Create methods to download and extract product information stored in an S3 bucket on AWS
+    def extract_from_s3(self, bucket_name, object_name, file_name):
+        s3_client = boto3.client("s3", config = Config(signature_version = UNSIGNED))
+        s3_client.download_file(bucket_name, object_name, file_name)
+        product_details = pd.read_csv(file_name)
+        return product_details
 
 
-if __name__ == '__main__': 
-#     api_key = "yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX"
-     extractor = DataExtractor()
-     print(extractor.retrieve_stores_data())
-
-    
-
-#     # db = DatabaseConnector()
-#     df_orders = extractor.retrieve_pdf_data()
-#     print(df_orders)
+# if __name__ == '__main__': 
+#    extractor = DataExtractor()
+#    product_details = extractor.extract_from_s3("data-handling-public", "product.csv", "product.csv")

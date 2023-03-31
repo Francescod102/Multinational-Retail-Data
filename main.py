@@ -38,3 +38,5 @@ db_connector.upload_to_db(card_details)
 
 
 # %%
+
+product_details = db_extractor.extract_from_s3("data-handling-public", "product.csv", "product.csv")
